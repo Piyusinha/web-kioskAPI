@@ -62,8 +62,24 @@ def fetchattendance(enrollment,dob,pa):
         row=[i.text for i in td]
         a.append(row)
     return jsonify(a)
-@app.route('/marks')
-def marks():
+@app.route('/marks/<string:enrollment>/<string:dob>/<string:pa>')
+def marks(enrollment,dob,pa):
+    payload = {
+    "x":"",
+    "txtInst":"Institute",
+    "InstCode":"JIIT",
+    "txtuType":"Member+Type",
+    "UserType101117":"S",
+    "txtCode":["Enrollment+No","Enter+Captcha+++++"],"MemberCode":enrollment,
+    "DOB":"DOB",
+    "DATE1":dob,
+    "txtPin":"Password/Pin",
+    "Password101117":pa,
+    "txtcap":captcha,
+    "BTNSubmit":"Submit"
+         }
+    s=requests.session()
+    resp = s.post('https://webkiosk.jiit.ac.in/CommonFiles/UseValid.jsp', data=payload,headers=headers,timeout=timeout)
     resp=requests.get('https://webkiosk.jiit.ac.in/StudentFiles/Exam/StudentEventMarksView.jsp?x=&exam=2018ODDSEM',headers=headers)
     soup = BeautifulSoup(resp.text,"lxml")
 
