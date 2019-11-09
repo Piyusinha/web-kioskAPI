@@ -62,7 +62,37 @@ def webkiosk(enrollment,dob,pa):
         row=[i.text for i in td]
         a.append(row)
     return jsonify(a)
+@app.route('/attendance/<string:enrollment>/<string:dob>/<string:pa>')
+def fetchattendance(enrollment,dob,pa):
+    payload = {
+    "x":"",
+    "txtInst":"Institute",
+    "InstCode":"JIIT",
+    "txtuType":"Member+Type",
+    "UserType101117":"S",
+    "txtCode":["Enrollment+No","Enter+Captcha+++++"],"MemberCode":enrollment,
+    "DOB":"DOB",
+    "DATE1":dob,
+    "txtPin":"Password/Pin",
+    "Password101117":pa,
+    "txtcap":captcha,
+    "BTNSubmit":"Submit"
+     }
+    s=requests.session()
+    resp = s.post('https://webkiosk.jiit.ac.in/CommonFiles/UseValid.jsp', data=payload,headers=headers,timeout=timeout)
 
+    resp=requests.get('https://webkiosk.jiit.ac.in/StudentFiles/Academic/StudentAttendanceList.jsp',headers=headers)
+    soup = BeautifulSoup(resp.text,"html5lib")
+
+    table=soup.find('table',id='table-1')
+
+    trows=table.find_all('tr')
+    a=[]
+    for tr in trows:
+        td=tr.find_all('td')
+        row=[i.text for i in td]
+        a.append(row)
+    return jsonify(a)
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)
