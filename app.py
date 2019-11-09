@@ -31,24 +31,24 @@ headers = {
 'Referer': 'https://webkiosk.jiit.ac.in/'
 
 }
-payload = {
-"x":"",
-"txtInst":"Institute",
-"InstCode":"JIIT",
-"txtuType":"Member+Type",
-"UserType101117":"S",
-"txtCode":["Enrollment+No","Enter+Captcha+++++"],"MemberCode":enrollment,
-"DOB":"DOB",
-"DATE1":dob,
-"txtPin":"Password/Pin",
-"Password101117":pa,
-"txtcap":captcha,
-"BTNSubmit":"Submit"
- }
-s=requests.session()
-resp = s.post('https://webkiosk.jiit.ac.in/CommonFiles/UseValid.jsp', data=payload,headers=headers,timeout=timeout)
 @app.route('/<string:enrollment>/<string:dob>/<string:pa>')
 def webkiosk(enrollment,dob,pa):
+    payload = {
+    "x":"",
+    "txtInst":"Institute",
+    "InstCode":"JIIT",
+    "txtuType":"Member+Type",
+    "UserType101117":"S",
+    "txtCode":["Enrollment+No","Enter+Captcha+++++"],"MemberCode":enrollment,
+    "DOB":"DOB",
+    "DATE1":dob,
+    "txtPin":"Password/Pin",
+    "Password101117":pa,
+    "txtcap":captcha,
+    "BTNSubmit":"Submit"
+     }
+    s=requests.session()
+    resp = s.post('https://webkiosk.jiit.ac.in/CommonFiles/UseValid.jsp', data=payload,headers=headers,timeout=timeout)
 
     resp=requests.get('https://webkiosk.jiit.ac.in/StudentFiles/Academic/ViewDatewiseLecAttendance.jsp?EXAM=2019ODDSEM&CTYPE=R&SC=160037&LTP=LT&mRegConfirmDate=16-07-2019&mRegConfirmDateOrg=16-07-2019&prevTFSTID=&prevLFSTID=&mLFSTID=JIIT1902468&mTFSTID=JIIT1902490',headers=headers)
     soup = BeautifulSoup(resp.text,"html5lib")
