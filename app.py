@@ -64,7 +64,7 @@ def fetchattendance(enrollment,dob,pa):
         a.append(row)
     return jsonify(a)
 @app.route('/marks/<string:enrollment>/<string:dob>/<string:pa>')
-def marks(enrollment,dob,pa):
+def fetchmarks(enrollment,dob,pa):
     resp = urllib.request.urlopen("https://webkiosk.jiit.ac.in/index.jsp")
     soup = BeautifulSoup(resp,'html.parser')
     captcha=soup.find_all('i')[0].text
