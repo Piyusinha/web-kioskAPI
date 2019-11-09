@@ -31,37 +31,6 @@ headers = {
 'Referer': 'https://webkiosk.jiit.ac.in/'
 
 }
-@app.route('/<string:enrollment>/<string:dob>/<string:pa>')
-def webkiosk(enrollment,dob,pa):
-    payload = {
-    "x":"",
-    "txtInst":"Institute",
-    "InstCode":"JIIT",
-    "txtuType":"Member+Type",
-    "UserType101117":"S",
-    "txtCode":["Enrollment+No","Enter+Captcha+++++"],"MemberCode":enrollment,
-    "DOB":"DOB",
-    "DATE1":dob,
-    "txtPin":"Password/Pin",
-    "Password101117":pa,
-    "txtcap":captcha,
-    "BTNSubmit":"Submit"
-     }
-    s=requests.session()
-    resp = s.post('https://webkiosk.jiit.ac.in/CommonFiles/UseValid.jsp', data=payload,headers=headers,timeout=timeout)
-
-    resp=requests.get('https://webkiosk.jiit.ac.in/StudentFiles/Academic/ViewDatewiseLecAttendance.jsp?EXAM=2019ODDSEM&CTYPE=R&SC=160037&LTP=LT&mRegConfirmDate=16-07-2019&mRegConfirmDateOrg=16-07-2019&prevTFSTID=&prevLFSTID=&mLFSTID=JIIT1902468&mTFSTID=JIIT1902490',headers=headers)
-    soup = BeautifulSoup(resp.text,"html5lib")
-
-    table=soup.find('table',id='table-1')
-
-    trows=table.find_all('tr')
-    a=[]
-    for tr in trows:
-        td=tr.find_all('td')
-        row=[i.text for i in td]
-        a.append(row)
-    return jsonify(a)
 @app.route('/attendance/<string:enrollment>/<string:dob>/<string:pa>')
 def fetchattendance(enrollment,dob,pa):
     payload = {
@@ -93,6 +62,20 @@ def fetchattendance(enrollment,dob,pa):
         row=[i.text for i in td]
         a.append(row)
     return jsonify(a)
+@app.route('/marks')
+def marks():
+    resp=requests.get('https://webkiosk.jiit.ac.in/StudentFiles/Exam/StudentEventMarksView.jsp?x=&exam=2018ODDSEM',headers=headers)
+    soup = BeautifulSoup(resp.text,"lxml")
 
+
+    table=soup.find('table',id='table-1')
+
+    trows=table.find_all('tr')
+    a=[]
+    for tr in trows:
+        td=tr.find_all('td')
+        row=[i.text for i in td]
+        a.append(row)
+    return jsonify(a)
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)
