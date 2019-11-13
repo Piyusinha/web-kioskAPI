@@ -107,7 +107,7 @@ def fetchmarks(enrollment,dob,pa):
     s=requests.session()
     resp = s.post('https://webkiosk.jiit.ac.in/CommonFiles/UseValid.jsp', data=payload,headers=headers,timeout=timeout)
     resp=requests.get('https://webkiosk.jiit.ac.in/StudentFiles/Exam/StudentEventMarksView.jsp?x=&exam=2018ODDSEM',headers=headers)
-    soup = BeautifulSoup(resp.text,"lxml")
+    soup = BeautifulSoup(resp.text,"html5lib")
 
 
     table=soup.find('table',id='table-1')
