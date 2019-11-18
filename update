@@ -1,0 +1,3 @@
+cols = rows[1].find_all('td')
+    link = cols[3].find('a').get('href')
+    print(link)
